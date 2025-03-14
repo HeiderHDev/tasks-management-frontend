@@ -1,0 +1,12 @@
+.top-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  h1 {
+    margin: 0;
+  }
+  .register-daily-button {
+    width: 150px;
+  }
+}
