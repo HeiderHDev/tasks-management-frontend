@@ -1,0 +1,47 @@
+<h2 class="task-form__title">Registrar Tarea</h2>
+<form
+  class="task-form"
+  autocomplete="off"
+  [formGroup]="taskForm"
+  (ngSubmit)="sendForm()"
+>
+  <mat-form-field class="task-form__group">
+    <mat-label>Título</mat-label>
+    <input
+      matInput
+      type="text"
+      id="title"
+      formControlName="title"
+      class="task-form__control"
+    />
+  </mat-form-field>
+  <mat-form-field class="task-form__group">
+    <mat-label>Descripción</mat-label>
+    <textarea
+      matInput
+      id="description"
+      formControlName="description"
+      class="task-form__control"
+    ></textarea>
+  </mat-form-field>
+  <mat-form-field class="task-form__group">
+    <mat-label>Estado</mat-label>
+    <mat-select id="status" formControlName="status" class="task-form__control">
+      <mat-option value="pendiente">Pendiente</mat-option>
+      <mat-option value="completado">Completada</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <div class="task-form__buttons">
+    <button
+      class="task-form__button--cancel"
+      type="button"
+      mat-button
+      (click)="closeForm()"
+    >
+      Cancelar
+    </button>
+    <button class="task-form__button--submit" type="submit" mat-flat-button>
+      Crear tarea
+    </button>
+  </div>
+</form>
