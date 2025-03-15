@@ -22,7 +22,8 @@
     "lib": ["ES2022", "dom"],
     "paths": {
       "@env/*": ["./src/environments/*"],
-      "@task/*": ["./src/app/task/*"]
+      "@task/*": ["./src/app/task/*"],
+      "@core/*": ["./src/app/core/*"]
     }
   },
   "angularCompilerOptions": {
