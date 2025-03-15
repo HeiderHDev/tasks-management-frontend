@@ -7,13 +7,14 @@ import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { TaskFormComponent } from './components/task-form/task-form.component';
+import { TaskListComponent } from './components/task-list/task-list.component';
 
 const materialModules = [MatButtonModule, MatIconModule];
 
 @Component({
   selector: 'app-task',
   standalone: true,
-  imports: [CommonModule, ...materialModules],
+  imports: [CommonModule, ...materialModules, TaskListComponent],
   templateUrl: './task.component.html',
   styleUrl: './task.component.scss',
   providers: [provideNativeDateAdapter()],
