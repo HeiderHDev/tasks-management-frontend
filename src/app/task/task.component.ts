@@ -3,9 +3,12 @@ import { Component, inject } from '@angular/core';
 
 import { MatButtonModule } from '@angular/material/button';
 import { provideNativeDateAdapter } from '@angular/material/core';
-import { MatDialog } from '@angular/material/dialog';
 
-const materialModules = [MatButtonModule];
+import { MatDialog } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
+import { TaskFormComponent } from './components/task-form/task-form.component';
+
+const materialModules = [MatButtonModule, MatIconModule];
 
 @Component({
   selector: 'app-task',
@@ -19,5 +22,14 @@ export class TaskComponent {
   public date = new Date();
   private matDialog = inject(MatDialog);
 
-  public openTaskFormModal() {}
+  public openTaskFormModal() {
+    const dialogRef = this.matDialog.open(TaskFormComponent, {
+      disableClose: true,
+    });
+    dialogRef.afterClosed().subscribe((reload) => {
+      if (reload) this.getAllTasks();
+    });
+  }
+
+  private getAllTasks() {}
 }
