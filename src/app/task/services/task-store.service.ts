@@ -39,4 +39,8 @@ export class TaskStoreService {
   public createTask(taskData: CreateTask) {
     return this._taskService.createTask(taskData);
   }
+
+  public refreshTasks(): void {
+    this.loadTasks();
+  }
 }

@@ -11,7 +11,7 @@ export class ToastService {
     this._ngxToastService.success({
       title,
       messages: [message],
-      delay: 10000,
+      delay: 8000,
     });
   }
 
@@ -19,7 +19,7 @@ export class ToastService {
     this._ngxToastService.error({
       title,
       messages: [message],
-      delay: 10000,
+      delay: 8000,
     });
   }
 
@@ -27,7 +27,7 @@ export class ToastService {
     this._ngxToastService.warning({
       title,
       messages: [message],
-      delay: 10000,
+      delay: 8000,
     });
   }
 
@@ -35,7 +35,7 @@ export class ToastService {
     this._ngxToastService.info({
       title,
       messages: [message],
-      delay: 10000,
+      delay: 8000,
     });
   }
 }

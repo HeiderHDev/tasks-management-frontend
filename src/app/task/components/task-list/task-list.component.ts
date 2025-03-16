@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import {
   AfterViewInit,
   Component,
+  effect,
   inject,
   OnInit,
   signal,
@@ -22,6 +23,7 @@ import { PaginationDto } from '@core/models/pagination-dto.interface';
 import { ToastService } from '@core/services/toast.service';
 
 import { Task } from '@task/interfaces/task.interface';
+import { TaskStoreService } from '@task/services/task-store.service';
 import { TaskService } from '@task/services/task.service';
 
 const materialModules = [
@@ -44,10 +46,8 @@ const materialModules = [
   styleUrl: './task-list.component.scss',
 })
 export class TaskListComponent implements OnInit, AfterViewInit {
-  public tasks = signal<Task[]>([]);
-  public totalRecords = signal<number>(0);
-
-  public pagination: PaginationDto = { Page: 1, RecordsPerPage: 5 };
+  private readonly _taskStore = inject(TaskStoreService);
+  private readonly _toastService = inject(ToastService);
 
   public dataSource = new MatTableDataSource<Task>([]);
   public displayedColumns: string[] = [
@@ -57,14 +57,17 @@ export class TaskListComponent implements OnInit, AfterViewInit {
     'isComplete',
   ];
 
-  private readonly _taskService = inject(TaskService);
-  private readonly _toasService = inject(ToastService);
-
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
+  constructor() {
+    effect(() => {
+      this.dataSource.data = this._taskStore.tasks();
+    });
+  }
+
   ngOnInit(): void {
-    this.loadTasks();
+    this._taskStore.loadTasks();
   }
 
   public ngAfterViewInit(): void {
@@ -72,31 +75,19 @@ export class TaskListComponent implements OnInit, AfterViewInit {
   }
 
   public updatePagination(event: PageEvent): void {
-    this.pagination = {
+    this._taskStore.loadTasks({
       Page: event.pageIndex + 1,
       RecordsPerPage: event.pageSize,
-    };
-    this.loadTasks();
-  }
-
-  private loadTasks(): void {
-    this._taskService.getListTask(this.pagination).subscribe({
-      next: (response) => {
-        const taskData = response.body as Task[];
-        const cabecera = response.headers.get(
-          'cantidad-total-registros'
-        ) as string;
-        this.tasks.set(taskData);
-
-        this.totalRecords.set(parseInt(cabecera, 10));
-
-        this.dataSource.data = taskData;
-      },
-      error: () => {
-        this._toasService.error('Error', 'Hubo un error al cargar las tareas');
-      },
     });
   }
 
   public changeStatus(task: Task): void {}
+
+  get totalRecords() {
+    return this._taskStore.totalRecords;
+  }
+
+  get pagination() {
+    return this._taskStore.currentPagination;
+  }
 }

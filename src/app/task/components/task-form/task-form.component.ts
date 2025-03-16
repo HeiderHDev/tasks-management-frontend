@@ -1,22 +1,25 @@
+import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
-import { MatInputModule } from '@angular/material/input';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCheckboxModule } from '@angular/material/checkbox';
 import {
   FormControl,
   FormGroup,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+
+import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDialogRef } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { TaskService } from '@task/services/task.service';
-import { CreateTask } from '@task/interfaces/create-task.interface';
+
 import { ToastService } from '@core/services/toast.service';
+
 import { FORM_ERRORS, FormErrorsMessages } from '@task/constants/form-errors';
-import { CommonModule } from '@angular/common';
+import { CreateTask } from '@task/interfaces/create-task.interface';
+import { TaskStoreService } from '@task/services/task-store.service';
 
 const materialModules = [
   MatInputModule,
@@ -36,8 +39,8 @@ const materialModules = [
 })
 export class TaskFormComponent {
   private readonly _dialogRef = inject(MatDialogRef<TaskFormComponent>);
-  private readonly _taskService = inject(TaskService);
-  private _toastService = inject(ToastService);
+  private readonly _taskStore = inject(TaskStoreService);
+  private readonly _toastService = inject(ToastService);
   private readonly _errorMessages: FormErrorsMessages = inject(FORM_ERRORS);
 
   public readonly taskForm = new FormGroup({
@@ -66,9 +69,10 @@ export class TaskFormComponent {
       isComplete: formValue.isComplete === 'completado',
     };
 
-    this._taskService.createTask(createTask).subscribe({
+    this._taskStore.createTask(createTask).subscribe({
       next: () => {
-        this.closeForm(true);
+        this._taskStore.refreshTasks();
+        this.closeForm();
         this._toastService.success('Bien hecho', 'Tarea creada correctamente');
       },
       error: () => {
