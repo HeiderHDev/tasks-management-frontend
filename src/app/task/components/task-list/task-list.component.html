@@ -48,24 +48,20 @@
               task.isComplete ? "check_circle" : "radio_button_unchecked"
             }}</mat-icon>
           </button>
-          <!-- Agrega más botones según necesites -->
         </td>
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-
-      <!-- Fila mostrada cuando no hay datos coincidentes -->
-      <!-- <tr class="mat-row" *matNoDataRow>
-        <td class="mat-cell" colspan="5">
-          No hay datos que coincidan con el filtro "{{ input.value }}"
-        </td>
-      </tr> -->
     </table>
   </div>
 
   <mat-paginator
-    [pageSizeOptions]="[15, 30, 50, 100]"
+    [length]="totalRecords()"
+    [pageSize]="pagination.RecordsPerPage"
+    [pageIndex]="pagination.Page - 1"
+    [pageSizeOptions]="[5, 10, 20, 50]"
     aria-label="Seleccionar página de tareas"
+    (page)="updatePagination($event)"
   ></mat-paginator>
 </div>

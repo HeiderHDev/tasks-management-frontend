@@ -1,25 +1,28 @@
+import { CommonModule } from '@angular/common';
 import {
-  Component,
-  OnInit,
-  ViewChild,
   AfterViewInit,
+  Component,
   inject,
-  input,
-  effect,
+  OnInit,
+  signal,
+  ViewChild,
 } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
-import { MatDialog } from '@angular/material/dialog';
-import { MatChipsModule } from '@angular/material/chips';
-import { MatTableModule } from '@angular/material/table';
-import { MatInputModule } from '@angular/material/input';
-import { MatFormFieldModule } from '@angular/material/form-field';
+
 import { MatButtonModule } from '@angular/material/button';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
-import { CommonModule, DatePipe } from '@angular/common';
-import { Task } from '@task/interfaces/task.interface';
+import { MatInputModule } from '@angular/material/input';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
+
+import { PaginationDto } from '@core/models/pagination-dto.interface';
+import { ToastService } from '@core/services/toast.service';
+
+import { Task } from '@task/interfaces/task.interface';
+import { TaskService } from '@task/services/task.service';
 
 const materialModules = [
   MatPaginator,
@@ -41,38 +44,59 @@ const materialModules = [
   styleUrl: './task-list.component.scss',
 })
 export class TaskListComponent implements OnInit, AfterViewInit {
-  public tasks = input.required<Task[]>();
+  public tasks = signal<Task[]>([]);
+  public totalRecords = signal<number>(0);
+
+  public pagination: PaginationDto = { Page: 1, RecordsPerPage: 5 };
+
+  public dataSource = new MatTableDataSource<Task>([]);
   public displayedColumns: string[] = [
-    'createdAt',
+    'actions',
     'title',
     'description',
     'isComplete',
-    'actions',
   ];
-  public dataSource!: MatTableDataSource<Task>;
+
+  private readonly _taskService = inject(TaskService);
+  private readonly _toasService = inject(ToastService);
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor() {
-    effect(() => {
-      if (this.dataSource) {
-        this.dataSource.data = this.tasks();
-      }
-    });
-  }
-
-  public ngOnInit(): void {
-    this.dataSource = new MatTableDataSource(this.tasks());
+  ngOnInit(): void {
+    this.loadTasks();
   }
 
   public ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
 
-  public changeStatus(task: Task): void {
-    task.isComplete = !task.isComplete;
-    this.dataSource.data = [...this.dataSource.data];
+  public updatePagination(event: PageEvent): void {
+    this.pagination = {
+      Page: event.pageIndex + 1,
+      RecordsPerPage: event.pageSize,
+    };
+    this.loadTasks();
   }
+
+  private loadTasks(): void {
+    this._taskService.getListTask(this.pagination).subscribe({
+      next: (response) => {
+        const taskData = response.body as Task[];
+        const cabecera = response.headers.get(
+          'cantidad-total-registros'
+        ) as string;
+        this.tasks.set(taskData);
+
+        this.totalRecords.set(parseInt(cabecera, 10));
+
+        this.dataSource.data = taskData;
+      },
+      error: () => {
+        this._toasService.error('Error', 'Hubo un error al cargar las tareas');
+      },
+    });
+  }
+
+  public changeStatus(task: Task): void {}
 }
