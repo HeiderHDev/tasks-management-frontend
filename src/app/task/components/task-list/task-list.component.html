@@ -1,62 +1,140 @@
-<div class="mat-elevation-z8">
-  <div class="table-responsive">
-    <table mat-table [dataSource]="dataSource" matSort>
-      <!-- Fecha Columna -->
-      <ng-container matColumnDef="createdAt">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha</th>
-        <td mat-cell *matCellDef="let task">
-          {{ task.createdAt | date : "shortDate" }}
-        </td>
-      </ng-container>
-
-      <!-- Título Columna -->
-      <ng-container matColumnDef="title">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Título</th>
-        <td mat-cell *matCellDef="let task">{{ task.title }}</td>
-      </ng-container>
-
-      <!-- Descripción Columna -->
-      <ng-container matColumnDef="description">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Descripción</th>
-        <td mat-cell *matCellDef="let task">{{ task.description }}</td>
-      </ng-container>
-
-      <!-- Estado Columna -->
-      <ng-container matColumnDef="isComplete">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado</th>
-        <td mat-cell *matCellDef="let task">
-          <mat-chip [color]="task.isComplete ? 'accent' : 'primary'" selected>
-            {{ task.isComplete ? "Completado" : "Pendiente" }}
-          </mat-chip>
-        </td>
-      </ng-container>
-
-      <!-- Acciones Columna -->
-      <ng-container matColumnDef="actions">
-        <th mat-header-cell *matHeaderCellDef>Acciones</th>
-        <td mat-cell *matCellDef="let task">
-          <button
-            mat-icon-button
-            (click)="changeStatus(task)"
-            [matTooltip]="
-              task.isComplete
-                ? 'Marcar como pendiente'
-                : 'Marcar como completado'
-            "
+<div class="task-table">
+  <div class="task-table__wrapper">
+    @if(dataSource.data.length === 0) {
+    <div class="task-table__empty">
+      <img
+        src="assets/img/no-data.svg"
+        alt="No hay tareas"
+        class="task-table__empty-image"
+      />
+      <p class="task-table__empty-text">No hay tareas registradas</p>
+      <p class="task-table__empty-subtext">
+        Crea una nueva tarea para comenzar
+      </p>
+    </div>
+    } @else {
+    <div class="task-table__container">
+      <table
+        mat-table
+        [dataSource]="dataSource"
+        matSort
+        class="task-table__table"
+      >
+        <!-- Fecha Columna -->
+        <ng-container matColumnDef="createdAt">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            class="task-table__header"
           >
-            <mat-icon>{{
-              task.isComplete ? "check_circle" : "radio_button_unchecked"
-            }}</mat-icon>
-          </button>
-        </td>
-      </ng-container>
+            Fecha
+          </th>
+          <td mat-cell *matCellDef="let task" class="task-table__cell">
+            {{ task.createdAt | date : "shortDate" }}
+          </td>
+        </ng-container>
 
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-    </table>
+        <!-- Título Columna -->
+        <ng-container matColumnDef="title">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            class="task-table__header"
+          >
+            Título
+          </th>
+          <td mat-cell *matCellDef="let task" class="task-table__cell">
+            {{ task.title }}
+          </td>
+        </ng-container>
+
+        <!-- Descripción Columna -->
+        <ng-container matColumnDef="description">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            class="task-table__header"
+          >
+            Descripción
+          </th>
+          <td
+            mat-cell
+            *matCellDef="let task"
+            class="task-table__cell task-table__cell--description"
+          >
+            {{ task.description }}
+          </td>
+        </ng-container>
+
+        <!-- Estado Columna -->
+        <ng-container matColumnDef="isComplete">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            class="task-table__header"
+          >
+            Estado
+          </th>
+          <td mat-cell *matCellDef="let task" class="task-table__cell">
+            <mat-chip
+              [ngClass]="
+                task.isComplete
+                  ? 'task-table__status-chip--completed'
+                  : 'task-table__status-chip--pending'
+              "
+              class="task-table__status-chip"
+              [color]="task.isComplete ? 'accent' : 'primary'"
+              selected
+            >
+              {{ task.isComplete ? "Completado" : "Pendiente" }}
+            </mat-chip>
+          </td>
+        </ng-container>
+
+        <!-- Acciones Columna -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef class="task-table__header">
+            Acciones
+          </th>
+          <td mat-cell *matCellDef="let task" class="task-table__cell">
+            <button
+              mat-icon-button
+              (click)="changeStatus(task)"
+              [matTooltip]="
+                task.isComplete
+                  ? 'Marcar como pendiente'
+                  : 'Marcar como completado'
+              "
+              class="task-table__action-button"
+            >
+              <mat-icon>{{
+                task.isComplete ? "check_circle" : "radio_button_unchecked"
+              }}</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr
+          mat-header-row
+          *matHeaderRowDef="displayedColumns; sticky: true"
+          class="task-table__header-row"
+        ></tr>
+        <tr
+          mat-row
+          *matRowDef="let row; columns: displayedColumns"
+          class="task-table__data-row"
+        ></tr>
+      </table>
+    </div>
+    }
   </div>
 
   <mat-paginator
+    class="task-table__paginator"
     [length]="totalRecords()"
     [pageSize]="pagination().RecordsPerPage"
     [pageIndex]="pagination().Page - 1"

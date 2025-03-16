@@ -1,6 +1,13 @@
 .layout {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+
   &__toolbar {
     background-color: var(--sys-surface-container);
+    position: sticky;
+    top: 0;
+    z-index: 100;
   }
 
   &__title {
@@ -38,7 +45,8 @@
 
   &__sidenav-container {
     flex: 1;
-    height: 100vh;
+    height: calc(100vh - 64px);
+    overflow: hidden;
     margin-top: 0 !important;
   }
 
@@ -75,7 +83,9 @@
   }
 
   &__content {
-    margin: 2rem;
+    padding: 2rem;
+    height: 100%;
+    overflow-y: auto;
   }
 }
 
@@ -85,6 +95,14 @@
       &-name {
         display: none;
       }
+    }
+
+    &__content {
+      padding: 1rem;
+    }
+
+    &__sidenav-container {
+      height: calc(100vh - 56px);
     }
   }
 }
