@@ -5,9 +5,24 @@
 .task-form {
   padding: 1rem 2rem;
 
+  &__group {
+    margin-bottom: 1.5rem; // Añadir margen inferior para separar los inputs
+  }
+
   &__buttons {
     display: flex;
     align-items: center;
     gap: 1rem;
+  }
+
+  .custom-input__error {
+    display: flex;
+    align-items: center;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+
+    mat-icon {
+      margin-right: 0.5rem;
+    }
   }
 }

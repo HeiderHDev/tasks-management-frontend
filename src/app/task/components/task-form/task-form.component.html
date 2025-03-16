@@ -14,6 +14,12 @@
       formControlName="title"
       class="task-form__control"
     />
+    @if (taskForm.get('title')?.invalid && taskForm.get('title')?.touched) {
+    <mat-error class="custom-input__error">
+      <mat-icon>error</mat-icon>
+      {{ getMessageError("title") }}
+    </mat-error>
+    }
   </mat-form-field>
   <mat-form-field class="task-form__group">
     <mat-label>Descripción</mat-label>
@@ -23,6 +29,13 @@
       formControlName="description"
       class="task-form__control"
     ></textarea>
+    @if (taskForm.get('description')?.invalid &&
+    taskForm.get('description')?.touched) {
+    <mat-error class="custom-input__error">
+      <mat-icon>error</mat-icon>
+      {{ getMessageError("description") }}
+    </mat-error>
+    }
   </mat-form-field>
   <mat-form-field class="task-form__group">
     <mat-label>Estado</mat-label>
@@ -34,6 +47,13 @@
       <mat-option value="pendiente">Pendiente</mat-option>
       <mat-option value="completado">Completada</mat-option>
     </mat-select>
+    @if (taskForm.get('isComplete')?.invalid &&
+    taskForm.get('isComplete')?.touched) {
+    <mat-error class="custom-input__error">
+      <mat-icon>error</mat-icon>
+      {{ getMessageError("isComplete") }}
+    </mat-error>
+    }
   </mat-form-field>
   <div class="task-form__buttons">
     <button
