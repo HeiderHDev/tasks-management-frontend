@@ -1,9 +1,8 @@
 import { inject, Injectable, signal } from '@angular/core';
-import { TaskService } from './task.service';
-import { Task } from '@task/interfaces/task.interface';
 import { PaginationDto } from '@core/models/pagination-dto.interface';
-import { finalize } from 'rxjs';
 import { CreateTask } from '@task/interfaces/create-task.interface';
+import { Task } from '@task/interfaces/task.interface';
+import { TaskService } from './task.service';
 
 @Injectable({
   providedIn: 'root',

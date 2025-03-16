@@ -5,7 +5,6 @@ import {
   effect,
   inject,
   OnInit,
-  signal,
   ViewChild,
 } from '@angular/core';
 
@@ -19,12 +18,8 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
-import { PaginationDto } from '@core/models/pagination-dto.interface';
-import { ToastService } from '@core/services/toast.service';
-
 import { Task } from '@task/interfaces/task.interface';
 import { TaskStoreService } from '@task/services/task-store.service';
-import { TaskService } from '@task/services/task.service';
 
 const materialModules = [
   MatPaginator,
@@ -47,7 +42,6 @@ const materialModules = [
 })
 export class TaskListComponent implements OnInit, AfterViewInit {
   private readonly _taskStore = inject(TaskStoreService);
-  private readonly _toastService = inject(ToastService);
 
   public dataSource = new MatTableDataSource<Task>([]);
   public displayedColumns: string[] = [
