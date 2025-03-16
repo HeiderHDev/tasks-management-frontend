@@ -12,6 +12,9 @@ import {
 } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatSelectModule } from '@angular/material/select';
+import { TaskService } from '@task/task.service';
+import { CreateTask } from '@task/interfaces/create-task.interface';
+import { ToastService } from '@core/services/toast.service';
 
 const materialModules = [
   MatInputModule,
@@ -31,22 +34,45 @@ const materialModules = [
 })
 export class TaskFormComponent {
   private readonly dialogRef = inject(MatDialogRef<TaskFormComponent>);
+  private readonly taskService = inject(TaskService);
+  private _toastService = inject(ToastService);
 
   public readonly taskForm = new FormGroup({
-    title: new FormControl('', [Validators.required, Validators.maxLength(50)]),
-    description: new FormControl('', [
+    title: new FormControl<string>('', [
+      Validators.required,
+      Validators.maxLength(50),
+    ]),
+    description: new FormControl<string>('', [
       Validators.required,
       Validators.minLength(10),
     ]),
-    status: new FormControl('pendiente', [
-      Validators.required,
-      Validators.pattern(/^(pendiente|completado)$/),
-    ]),
+    isComplete: new FormControl<string>('pendiente', [Validators.required]),
   });
 
-  public sendForm(): void {}
+  public sendForm(): void {
+    if (this.taskForm.invalid) {
+      return;
+    }
 
-  public closeForm(realod?: boolean): void {
-    this.dialogRef.close(realod);
+    const formValue = this.taskForm.value;
+    const createTask: CreateTask = {
+      title: formValue.title!,
+      description: formValue.description!,
+      isComplete: formValue.isComplete === 'completado',
+    };
+
+    this.taskService.createTask(createTask).subscribe({
+      next: () => {
+        this.closeForm(true);
+        this._toastService.success('Bien hecho', 'Tarea creada correctamente');
+      },
+      error: (error) => {
+        console.error(error);
+      },
+    });
+  }
+
+  public closeForm(reload?: boolean): void {
+    this.dialogRef.close(reload);
   }
 }

@@ -26,7 +26,11 @@
   </mat-form-field>
   <mat-form-field class="task-form__group">
     <mat-label>Estado</mat-label>
-    <mat-select id="status" formControlName="status" class="task-form__control">
+    <mat-select
+      id="isComplete"
+      formControlName="isComplete"
+      class="task-form__control"
+    >
       <mat-option value="pendiente">Pendiente</mat-option>
       <mat-option value="completado">Completada</mat-option>
     </mat-select>
