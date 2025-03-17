@@ -140,8 +140,8 @@ API/
 1. **Clonar el repositorio**
 
 ```
-  git clone https://github.com/tu-usuario/task-management-system.git
-  cd task-management-system
+  git clone https://github.com/tu-usuario/task-management-frontend.git
+  cd task-management-frontend
 ```
 
 2. **Frontend (Angular)**
@@ -159,7 +159,7 @@ API/
   ```
 
 ## 🌐 Demo en Vivo
-![Imagen del frontend](./app/assets/img/app.png)
+![Imagen del frontend](./src/app/assets/img/app.png)
 Enlaces:
 
 
