@@ -1,12 +1,29 @@
 <section class="top-section">
-  <button
-    class="register-daily-button animate__animated animate__fadeIn"
-    mat-flat-button
-    (click)="openTaskFormModal()"
-  >
-    <mat-icon> add </mat-icon>
-    Crear tarea
-  </button>
+  <div class="actions-container animate__animated animate__fadeIn">
+    <button
+      class="register-daily-button"
+      mat-flat-button
+      (click)="openTaskFormModal()"
+    >
+      <mat-icon> add </mat-icon>
+      Crear tarea
+    </button>
+
+    <div class="filter-container">
+      <mat-button-toggle-group [value]="currentFilter()">
+        <mat-button-toggle [value]="undefined" (click)="clearFilter()">
+          Todas
+        </mat-button-toggle>
+        <mat-button-toggle [value]="false" (click)="filterPending()">
+          Pendientes
+        </mat-button-toggle>
+        <mat-button-toggle [value]="true" (click)="filterCompleted()">
+          Completadas
+        </mat-button-toggle>
+      </mat-button-toggle-group>
+    </div>
+  </div>
+
   <h1 class="animate__animated animate__fadeIn">{{ date | date }}</h1>
 </section>
 
