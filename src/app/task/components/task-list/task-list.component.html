@@ -95,10 +95,10 @@
           </td>
         </ng-container>
 
-        <!-- Acciones Columna -->
-        <ng-container matColumnDef="actions">
+        <!-- Cambiar Estado Columna -->
+        <ng-container matColumnDef="estado">
           <th mat-header-cell *matHeaderCellDef class="task-table__header">
-            Acciones
+            Cambiar Estado
           </th>
           <td mat-cell *matCellDef="let task" class="task-table__cell">
             <button
@@ -114,6 +114,24 @@
               <mat-icon>{{
                 task.isComplete ? "check_circle" : "radio_button_unchecked"
               }}</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <!-- Eliminar Columna -->
+        <ng-container matColumnDef="eliminar">
+          <th mat-header-cell *matHeaderCellDef class="task-table__header">
+            Eliminar
+          </th>
+          <td mat-cell *matCellDef="let task" class="task-table__cell">
+            <button
+              mat-icon-button
+              color="warn"
+              (click)="confirmDeleteTask(task)"
+              matTooltip="Eliminar tarea"
+              class="task-table__action-button task-table__action-button--delete"
+            >
+              <mat-icon>delete</mat-icon>
             </button>
           </td>
         </ng-container>
