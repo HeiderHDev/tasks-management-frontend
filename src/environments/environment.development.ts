@@ -1,4 +1,5 @@
 export const environment = {
-  production: false,
-  apiUrl: 'https://localhost:7244',
+  production: true,
+  apiUrl:
+    'https://taskmanagementbackend20250316224751-hndrdaagebe6dsfp.canadacentral-01.azurewebsites.net',
 };
